@@ -11,7 +11,8 @@
 */
 
 @layer base {
-  :root {
+  :root,
+  .light {
     /* Light mode - inspired by logo colors */
     --background: 250 25% 98%;
     --foreground: 260 30% 20%;
@@ -149,6 +150,71 @@
     --sidebar-border: 260 20% 20%;
     --sidebar-ring: 270 60% 60%;
   }
+
+  /* High Contrast Mode - WCAG AAA compliance */
+  .high-contrast {
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
+
+    --card: 0 0% 5%;
+    --card-foreground: 0 0% 100%;
+
+    --popover: 0 0% 5%;
+    --popover-foreground: 0 0% 100%;
+
+    --primary: 50 100% 50%;
+    --primary-foreground: 0 0% 0%;
+
+    --secondary: 0 0% 15%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 75%;
+
+    --accent: 180 100% 40%;
+    --accent-foreground: 0 0% 0%;
+
+    --destructive: 0 100% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 0 0% 40%;
+    --input: 0 0% 15%;
+    --ring: 50 100% 50%;
+
+    --radius: 0.5rem;
+
+    --sarcasm: 0 100% 50%;
+    --sarcasm-light: 0 100% 15%;
+    --sarcasm-foreground: 0 0% 100%;
+
+    --metaphor: 180 100% 50%;
+    --metaphor-light: 180 100% 15%;
+    --metaphor-foreground: 0 0% 0%;
+
+    --clarity: 120 100% 40%;
+    --clarity-light: 120 100% 10%;
+    --clarity-foreground: 0 0% 100%;
+
+    --simile: 180 100% 50%;
+    --personification: 300 100% 60%;
+    --hyperbole: 0 100% 60%;
+    --idiom: 50 100% 50%;
+    --symbolism: 270 100% 60%;
+    --imagery: 120 100% 50%;
+
+    --confidence-high: 120 100% 40%;
+    --confidence-medium: 50 100% 50%;
+    --confidence-low: 0 0% 60%;
+
+    --sidebar-background: 0 0% 0%;
+    --sidebar-foreground: 0 0% 100%;
+    --sidebar-primary: 50 100% 50%;
+    --sidebar-primary-foreground: 0 0% 0%;
+    --sidebar-accent: 180 100% 30%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 0 0% 40%;
+    --sidebar-ring: 50 100% 50%;
+  }
 }
 
 @layer base {
@@ -167,6 +233,27 @@
 
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Outfit', system-ui, sans-serif;
+  }
+
+  /* High contrast specific overrides */
+  .high-contrast {
+    font-weight: 500;
+  }
+
+  .high-contrast * {
+    border-width: 2px !important;
+  }
+
+  .high-contrast button,
+  .high-contrast a {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .high-contrast button:focus,
+  .high-contrast a:focus {
+    outline: 3px solid hsl(var(--primary));
+    outline-offset: 2px;
   }
 }
 
@@ -189,6 +276,12 @@
 
   .shadow-soft {
     box-shadow: 0 2px 12px -2px hsl(var(--foreground) / 0.08);
+  }
+
+  /* High contrast removes shadows */
+  .high-contrast .shadow-calm,
+  .high-contrast .shadow-soft {
+    box-shadow: none;
   }
 
   .animate-pulse-gentle {
@@ -218,6 +311,13 @@
   .glass {
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
+  }
+
+  /* High contrast disables glass effect */
+  .high-contrast .glass {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: hsl(var(--card));
   }
 }
 
@@ -281,4 +381,15 @@
   opacity: 0;
   transform: translateX(-10px);
   transition: opacity 300ms ease-in, transform 300ms ease-in;
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

@@ -1,28 +1,62 @@
-import { Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Sun, Moon, Eye } from "lucide-react";
 import { useTheme } from "@/hooks/useTheme";
 
 export default function ThemeToggle() {
-  const { theme, toggleTheme } = useTheme();
+  const { theme, setTheme, isHighContrast } = useTheme();
+
+  const getIcon = () => {
+    if (theme === "light") return <Sun className="w-4 h-4" />;
+    if (theme === "dark") return <Moon className="w-4 h-4" />;
+    return <Eye className="w-4 h-4" />;
+  };
 
   return (
-    <Button
-      variant="ghost"
-      size="icon"
-      onClick={toggleTheme}
-      className="relative w-10 h-10 rounded-full bg-accent/50 hover:bg-accent transition-all duration-300 group"
-      aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
-    >
-      <Sun className={`h-5 w-5 absolute transition-all duration-300 ${
-        theme === "light" 
-          ? "rotate-0 scale-100 opacity-100" 
-          : "rotate-90 scale-0 opacity-0"
-      }`} />
-      <Moon className={`h-5 w-5 absolute transition-all duration-300 ${
-        theme === "dark" 
-          ? "rotate-0 scale-100 opacity-100" 
-          : "-rotate-90 scale-0 opacity-0"
-      }`} />
-    </Button>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button
+          variant="outline"
+          size="icon"
+          className={`rounded-full transition-all duration-300 ${
+            isHighContrast ? "border-2 border-foreground" : ""
+          }`}
+          aria-label="Toggle theme"
+        >
+          {getIcon()}
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="min-w-[160px]">
+        <DropdownMenuItem
+          onClick={() => setTheme("light")}
+          className="gap-2 cursor-pointer"
+        >
+          <Sun className="w-4 h-4" />
+          <span>Light</span>
+          {theme === "light" && <span className="ml-auto text-primary">✓</span>}
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={() => setTheme("dark")}
+          className="gap-2 cursor-pointer"
+        >
+          <Moon className="w-4 h-4" />
+          <span>Dark</span>
+          {theme === "dark" && <span className="ml-auto text-primary">✓</span>}
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={() => setTheme("high-contrast")}
+          className="gap-2 cursor-pointer"
+        >
+          <Eye className="w-4 h-4" />
+          <span>High Contrast</span>
+          {theme === "high-contrast" && <span className="ml-auto text-primary">✓</span>}
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }
