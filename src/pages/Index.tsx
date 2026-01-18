@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Sparkles, MessageCircle, Zap, Shield, Feather, Heart } from "lucide-react";
+import { useNavigate, Link } from "react-router-dom";
+import { Sparkles, MessageCircle, Zap, Feather, Heart, BookOpen } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useChatHistory } from "@/hooks/useChatHistory";
@@ -137,6 +137,13 @@ const Index = () => {
               <Zap className="w-3.5 h-3.5 text-clarity" />
               & More
             </div>
+            <Link
+              to="/examples"
+              className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent text-accent-foreground text-sm font-medium shadow-soft transition-transform hover:scale-105"
+            >
+              <BookOpen className="w-3.5 h-3.5" />
+              Examples
+            </Link>
           </div>
         </div>
       </header>
