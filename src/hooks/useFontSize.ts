@@ -7,23 +7,28 @@ const DEFAULT_SIZE = 16;
 const STEP = 2;
 
 export function useFontSize() {
-  const [fontSize, setFontSize] = useState<number>(() => {
-    if (typeof window !== "undefined") {
-      const stored = sessionStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        const parsed = parseInt(stored, 10);
-        if (!isNaN(parsed) && parsed >= MIN_SIZE && parsed <= MAX_SIZE) {
-          return parsed;
-        }
+  const [fontSize, setFontSize] = useState(DEFAULT_SIZE);
+  const [isHydrated, setIsHydrated] = useState(false);
+
+  // Hydrate from sessionStorage on mount
+  useEffect(() => {
+    const stored = sessionStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      const parsed = parseInt(stored, 10);
+      if (!isNaN(parsed) && parsed >= MIN_SIZE && parsed <= MAX_SIZE) {
+        setFontSize(parsed);
       }
     }
-    return DEFAULT_SIZE;
-  });
+    setIsHydrated(true);
+  }, []);
 
+  // Apply font size to document
   useEffect(() => {
-    document.documentElement.style.fontSize = `${fontSize}px`;
-    sessionStorage.setItem(STORAGE_KEY, fontSize.toString());
-  }, [fontSize]);
+    if (isHydrated) {
+      document.documentElement.style.fontSize = `${fontSize}px`;
+      sessionStorage.setItem(STORAGE_KEY, fontSize.toString());
+    }
+  }, [fontSize, isHydrated]);
 
   const increase = useCallback(() => {
     setFontSize((prev) => Math.min(prev + STEP, MAX_SIZE));
