@@ -5,133 +5,149 @@
 @tailwind utilities;
 
 /* 
-  Clarity - Accessible Text Analyzer Design System
-  A calming, accessible design focused on clarity and ease of use
+  Context C?ue - Accessible Text Analyzer Design System
+  A vibrant, accessible design inspired by the logo colors
+  Purple, Blue, Yellow, Orange palette
 */
 
 @layer base {
   :root {
-    /* Calming teal-based palette */
-    --background: 180 20% 98%;
-    --foreground: 200 25% 20%;
+    /* Light mode - inspired by logo colors */
+    --background: 250 25% 98%;
+    --foreground: 260 30% 20%;
 
-    --card: 180 15% 99%;
-    --card-foreground: 200 25% 20%;
+    --card: 250 20% 99%;
+    --card-foreground: 260 30% 20%;
 
-    --popover: 180 15% 99%;
-    --popover-foreground: 200 25% 20%;
+    --popover: 250 20% 99%;
+    --popover-foreground: 260 30% 20%;
 
-    /* Soft teal primary */
-    --primary: 174 42% 45%;
+    /* Purple primary (from logo) */
+    --primary: 270 50% 45%;
     --primary-foreground: 0 0% 100%;
 
-    /* Warm cream secondary */
-    --secondary: 38 35% 94%;
-    --secondary-foreground: 200 25% 25%;
+    /* Warm cream/yellow secondary */
+    --secondary: 45 60% 94%;
+    --secondary-foreground: 270 30% 25%;
 
     /* Soft muted tones */
-    --muted: 180 15% 94%;
-    --muted-foreground: 200 15% 45%;
+    --muted: 250 15% 94%;
+    --muted-foreground: 260 15% 45%;
 
-    /* Gentle accent */
-    --accent: 174 35% 90%;
-    --accent-foreground: 174 42% 35%;
+    /* Blue accent (from logo) */
+    --accent: 200 70% 92%;
+    --accent-foreground: 200 60% 35%;
 
-    /* Soft coral for warnings/sarcasm */
-    --destructive: 12 76% 61%;
+    /* Orange for warnings/sarcasm (from logo) */
+    --destructive: 25 90% 55%;
     --destructive-foreground: 0 0% 100%;
 
     /* Soft borders */
-    --border: 180 15% 88%;
-    --input: 180 15% 92%;
-    --ring: 174 42% 45%;
+    --border: 250 15% 88%;
+    --input: 250 15% 92%;
+    --ring: 270 50% 45%;
 
     --radius: 1rem;
 
-    /* Sarcasm indicator - warm coral */
-    --sarcasm: 12 76% 61%;
-    --sarcasm-light: 12 76% 95%;
-    --sarcasm-foreground: 12 50% 30%;
+    /* Sarcasm indicator - orange (from logo) */
+    --sarcasm: 25 90% 55%;
+    --sarcasm-light: 25 80% 95%;
+    --sarcasm-foreground: 25 50% 25%;
 
-    /* Metaphor indicator - soft amber */
-    --metaphor: 38 80% 55%;
-    --metaphor-light: 38 80% 95%;
-    --metaphor-foreground: 38 50% 25%;
+    /* Figurative language indicator - blue (from logo) */
+    --metaphor: 200 70% 50%;
+    --metaphor-light: 200 70% 94%;
+    --metaphor-foreground: 200 50% 25%;
 
     /* Success/clarity - soft green */
     --clarity: 158 45% 50%;
     --clarity-light: 158 45% 95%;
     --clarity-foreground: 158 35% 25%;
 
+    /* Figurative types colors */
+    --simile: 180 60% 45%;
+    --personification: 320 50% 55%;
+    --hyperbole: 350 70% 55%;
+    --idiom: 45 80% 50%;
+    --symbolism: 280 50% 55%;
+    --imagery: 140 50% 45%;
+
     /* Confidence levels */
     --confidence-high: 158 45% 50%;
-    --confidence-medium: 38 80% 55%;
-    --confidence-low: 200 15% 65%;
+    --confidence-medium: 45 80% 50%;
+    --confidence-low: 260 15% 65%;
 
     /* Sidebar colors */
-    --sidebar-background: 180 20% 97%;
-    --sidebar-foreground: 200 25% 25%;
-    --sidebar-primary: 174 42% 45%;
+    --sidebar-background: 250 20% 97%;
+    --sidebar-foreground: 260 25% 25%;
+    --sidebar-primary: 270 50% 45%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 174 35% 92%;
-    --sidebar-accent-foreground: 174 42% 35%;
-    --sidebar-border: 180 15% 88%;
-    --sidebar-ring: 174 42% 45%;
+    --sidebar-accent: 200 70% 92%;
+    --sidebar-accent-foreground: 200 60% 35%;
+    --sidebar-border: 250 15% 88%;
+    --sidebar-ring: 270 50% 45%;
   }
 
   .dark {
-    --background: 200 25% 10%;
-    --foreground: 180 15% 95%;
+    --background: 260 25% 10%;
+    --foreground: 250 15% 95%;
 
-    --card: 200 25% 12%;
-    --card-foreground: 180 15% 95%;
+    --card: 260 25% 12%;
+    --card-foreground: 250 15% 95%;
 
-    --popover: 200 25% 12%;
-    --popover-foreground: 180 15% 95%;
+    --popover: 260 25% 12%;
+    --popover-foreground: 250 15% 95%;
 
-    --primary: 174 50% 55%;
-    --primary-foreground: 200 25% 10%;
+    --primary: 270 60% 60%;
+    --primary-foreground: 260 25% 10%;
 
-    --secondary: 200 20% 18%;
-    --secondary-foreground: 180 15% 90%;
+    --secondary: 260 20% 18%;
+    --secondary-foreground: 250 15% 90%;
 
-    --muted: 200 20% 18%;
-    --muted-foreground: 180 10% 60%;
+    --muted: 260 20% 18%;
+    --muted-foreground: 250 10% 60%;
 
-    --accent: 174 35% 20%;
-    --accent-foreground: 174 50% 70%;
+    --accent: 200 50% 25%;
+    --accent-foreground: 200 70% 75%;
 
-    --destructive: 12 60% 50%;
+    --destructive: 25 70% 50%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 200 20% 20%;
-    --input: 200 20% 18%;
-    --ring: 174 50% 55%;
+    --border: 260 20% 20%;
+    --input: 260 20% 18%;
+    --ring: 270 60% 60%;
 
-    --sarcasm: 12 60% 55%;
-    --sarcasm-light: 12 40% 20%;
-    --sarcasm-foreground: 12 50% 85%;
+    --sarcasm: 25 70% 55%;
+    --sarcasm-light: 25 40% 20%;
+    --sarcasm-foreground: 25 50% 85%;
 
-    --metaphor: 38 70% 50%;
-    --metaphor-light: 38 40% 18%;
-    --metaphor-foreground: 38 50% 85%;
+    --metaphor: 200 60% 55%;
+    --metaphor-light: 200 40% 18%;
+    --metaphor-foreground: 200 50% 85%;
 
     --clarity: 158 50% 50%;
     --clarity-light: 158 30% 18%;
     --clarity-foreground: 158 40% 85%;
 
-    --confidence-high: 158 50% 50%;
-    --confidence-medium: 38 70% 50%;
-    --confidence-low: 200 15% 50%;
+    --simile: 180 50% 50%;
+    --personification: 320 45% 55%;
+    --hyperbole: 350 60% 55%;
+    --idiom: 45 70% 55%;
+    --symbolism: 280 45% 60%;
+    --imagery: 140 45% 50%;
 
-    --sidebar-background: 200 25% 10%;
-    --sidebar-foreground: 180 15% 90%;
-    --sidebar-primary: 174 50% 55%;
-    --sidebar-primary-foreground: 200 25% 10%;
-    --sidebar-accent: 174 30% 18%;
-    --sidebar-accent-foreground: 174 50% 70%;
-    --sidebar-border: 200 20% 20%;
-    --sidebar-ring: 174 50% 55%;
+    --confidence-high: 158 50% 50%;
+    --confidence-medium: 45 70% 55%;
+    --confidence-low: 260 15% 50%;
+
+    --sidebar-background: 260 25% 10%;
+    --sidebar-foreground: 250 15% 90%;
+    --sidebar-primary: 270 60% 60%;
+    --sidebar-primary-foreground: 260 25% 10%;
+    --sidebar-accent: 200 40% 20%;
+    --sidebar-accent-foreground: 200 60% 75%;
+    --sidebar-border: 260 20% 20%;
+    --sidebar-ring: 270 60% 60%;
   }
 }
 
@@ -160,7 +176,11 @@
   }
 
   .gradient-primary {
-    background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(174 50% 55%) 100%);
+    background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(270 60% 55%) 100%);
+  }
+
+  .gradient-brand {
+    background: linear-gradient(135deg, hsl(270 50% 45%) 0%, hsl(200 70% 50%) 50%, hsl(45 80% 50%) 100%);
   }
 
   .shadow-calm {

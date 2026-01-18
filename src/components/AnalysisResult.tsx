@@ -1,8 +1,8 @@
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { AlertTriangle, Lightbulb, CheckCircle2, HelpCircle, Quote, ArrowRight } from "lucide-react";
-import type { Analysis, SarcasmInstance, MetaphorInstance } from "@/types/analysis";
+import { AlertTriangle, Lightbulb, CheckCircle2, HelpCircle, Quote, ArrowRight, Feather, Mountain, Megaphone, BookOpen, Eye, Palette } from "lucide-react";
+import type { Analysis, SarcasmInstance, MetaphorInstance, FigurativeLanguageType } from "@/types/analysis";
 
 interface Props {
   analysis: Analysis;
@@ -26,6 +26,49 @@ function ConfidenceBadge({ level }: { level: "high" | "medium" | "low" }) {
       {labels[level]}
     </Badge>
   );
+}
+
+function getTypeIcon(type: FigurativeLanguageType | undefined) {
+  switch (type) {
+    case "simile":
+      return <Feather className="w-5 h-5" />;
+    case "personification":
+      return <Mountain className="w-5 h-5" />;
+    case "hyperbole":
+      return <Megaphone className="w-5 h-5" />;
+    case "idiom":
+      return <BookOpen className="w-5 h-5" />;
+    case "imagery":
+      return <Eye className="w-5 h-5" />;
+    case "symbolism":
+      return <Palette className="w-5 h-5" />;
+    default:
+      return <HelpCircle className="w-5 h-5" />;
+  }
+}
+
+function getTypeLabel(type: FigurativeLanguageType | undefined): string {
+  if (!type) return "Metaphor";
+  return type.charAt(0).toUpperCase() + type.slice(1);
+}
+
+function getTypeColor(type: FigurativeLanguageType | undefined): string {
+  switch (type) {
+    case "simile":
+      return "text-figurative-simile";
+    case "personification":
+      return "text-figurative-personification";
+    case "hyperbole":
+      return "text-figurative-hyperbole";
+    case "idiom":
+      return "text-figurative-idiom";
+    case "imagery":
+      return "text-figurative-imagery";
+    case "symbolism":
+      return "text-figurative-symbolism";
+    default:
+      return "text-metaphor";
+  }
 }
 
 function SarcasmCard({ instance, index }: { instance: SarcasmInstance; index: number }) {
@@ -74,16 +117,23 @@ function SarcasmCard({ instance, index }: { instance: SarcasmInstance; index: nu
   );
 }
 
-function MetaphorCard({ instance, index }: { instance: MetaphorInstance; index: number }) {
+function FigurativeLanguageCard({ instance, index }: { instance: MetaphorInstance; index: number }) {
+  const typeColor = getTypeColor(instance.type);
+  
   return (
     <Card className="p-5 bg-metaphor-light border-metaphor/20 animate-slide-up" style={{ animationDelay: `${index * 100}ms` }}>
       <div className="space-y-4">
         <div className="flex items-start justify-between gap-4">
-          <div className="flex items-center gap-2 text-metaphor font-medium">
-            <HelpCircle className="w-5 h-5" />
-            <span>Metaphor / Figurative Language</span>
+          <div className={`flex items-center gap-2 ${typeColor} font-medium`}>
+            {getTypeIcon(instance.type)}
+            <span>{getTypeLabel(instance.type)} Detected</span>
           </div>
-          <ConfidenceBadge level={instance.confidence} />
+          <div className="flex items-center gap-2">
+            <Badge variant="secondary" className="text-xs">
+              {getTypeLabel(instance.type)}
+            </Badge>
+            <ConfidenceBadge level={instance.confidence} />
+          </div>
         </div>
 
         <blockquote className="border-l-4 border-metaphor pl-4 py-2 bg-background/50 rounded-r-lg">
@@ -121,7 +171,7 @@ function MetaphorCard({ instance, index }: { instance: MetaphorInstance; index: 
 }
 
 export default function AnalysisResult({ analysis }: Props) {
-  const hasFigurativeLanguage = analysis.hasSarcasm || analysis.hasMetaphors;
+  const hasFigurativeLanguage = analysis.hasSarcasm || analysis.hasMetaphors || analysis.hasFigurativeLanguage;
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -147,9 +197,9 @@ export default function AnalysisResult({ analysis }: Props) {
                   {analysis.sarcasmInstances.length} Sarcasm{analysis.sarcasmInstances.length !== 1 ? 's' : ''}
                 </Badge>
               )}
-              {analysis.hasMetaphors && (
+              {(analysis.hasMetaphors || analysis.hasFigurativeLanguage) && analysis.metaphorInstances.length > 0 && (
                 <Badge className="bg-metaphor/10 text-metaphor border-metaphor/20">
-                  {analysis.metaphorInstances.length} Metaphor{analysis.metaphorInstances.length !== 1 ? 's' : ''}
+                  {analysis.metaphorInstances.length} Figurative Expression{analysis.metaphorInstances.length !== 1 ? 's' : ''}
                 </Badge>
               )}
               {!hasFigurativeLanguage && (
@@ -164,7 +214,7 @@ export default function AnalysisResult({ analysis }: Props) {
 
       {/* Detailed Findings */}
       {hasFigurativeLanguage && (
-        <Accordion type="multiple" defaultValue={["sarcasm", "metaphors"]} className="space-y-4">
+        <Accordion type="multiple" defaultValue={["sarcasm", "figurative"]} className="space-y-4">
           {analysis.hasSarcasm && analysis.sarcasmInstances.length > 0 && (
             <AccordionItem value="sarcasm" className="border-0">
               <AccordionTrigger className="bg-sarcasm-light hover:bg-sarcasm-light/80 rounded-lg px-5 py-4 text-sarcasm-foreground font-display font-semibold">
@@ -181,17 +231,17 @@ export default function AnalysisResult({ analysis }: Props) {
             </AccordionItem>
           )}
 
-          {analysis.hasMetaphors && analysis.metaphorInstances.length > 0 && (
-            <AccordionItem value="metaphors" className="border-0">
+          {(analysis.hasMetaphors || analysis.hasFigurativeLanguage) && analysis.metaphorInstances.length > 0 && (
+            <AccordionItem value="figurative" className="border-0">
               <AccordionTrigger className="bg-metaphor-light hover:bg-metaphor-light/80 rounded-lg px-5 py-4 text-metaphor-foreground font-display font-semibold">
                 <span className="flex items-center gap-2">
                   <HelpCircle className="w-5 h-5 text-metaphor" />
-                  Metaphors & Figurative Language ({analysis.metaphorInstances.length})
+                  Figurative Language ({analysis.metaphorInstances.length})
                 </span>
               </AccordionTrigger>
               <AccordionContent className="pt-4 space-y-4">
                 {analysis.metaphorInstances.map((instance, index) => (
-                  <MetaphorCard key={index} instance={instance} index={index} />
+                  <FigurativeLanguageCard key={index} instance={instance} index={index} />
                 ))}
               </AccordionContent>
             </AccordionItem>
@@ -209,7 +259,7 @@ export default function AnalysisResult({ analysis }: Props) {
                 Good news! This text is straightforward
               </h3>
               <p className="text-sm text-clarity-foreground/80">
-                The text you provided doesn't contain sarcasm or metaphors. The meaning is direct and 
+                The text you provided doesn't contain sarcasm or figurative language. The meaning is direct and 
                 can be understood at face value. This kind of clear communication is often easier to interpret.
               </p>
             </div>
