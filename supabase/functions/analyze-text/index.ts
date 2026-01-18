@@ -28,15 +28,28 @@ serve(async (req) => {
 
     console.log("Analyzing text:", text.substring(0, 100) + "...");
 
-    const systemPrompt = `You are an accessibility-focused text analyzer that helps people understand sarcasm, metaphors, and figurative language. Your role is to help individuals who may struggle with interpreting tone and non-literal speech, such as those on the autism spectrum.
+    const systemPrompt = `You are an accessibility-focused text analyzer that helps people understand sarcasm, figurative language, and tone. Your role is to help individuals who may struggle with interpreting tone and non-literal speech, such as those on the autism spectrum.
 
 Analyze the provided text and return a JSON response using the following tool call format. Be thorough and educational in your explanations.
 
-For each piece of sarcasm or metaphor found:
-- Explain WHY it is sarcasm or a metaphor (the underlying mechanism)
+IMPORTANT: You must analyze for ALL types of figurative language, including:
+- Sarcasm (saying the opposite of what you mean)
+- Metaphors (direct comparisons without "like" or "as")
+- Similes (comparisons using "like" or "as")
+- Personification (giving human qualities to non-human things)
+- Hyperbole (extreme exaggeration for effect)
+- Idioms (phrases with non-literal cultural meanings)
+- Symbolism (using objects to represent ideas)
+- Imagery (vivid descriptive language)
+
+For each piece of sarcasm or figurative language found:
+- Identify the TYPE of figurative language (metaphor, simile, personification, hyperbole, idiom, symbolism, imagery)
+- Explain WHY it qualifies as that type
 - Provide the LITERAL meaning (what the words actually say)
 - Provide the INTENDED meaning (what the speaker actually means)
 - Give a confidence level (high, medium, low)
+
+Also provide a SIMPLIFIED EXPLANATION of the entire text - rewrite it in simple, clear, accessible language that removes all figurative language and expresses the core meaning directly.
 
 Be encouraging and supportive in tone. If the text is straightforward with no figurative language, celebrate that clarity.`;
 
@@ -50,14 +63,14 @@ Be encouraging and supportive in tone. If the text is straightforward with no fi
         model: "google/gemini-3-flash-preview",
         messages: [
           { role: "system", content: systemPrompt },
-          { role: "user", content: `Please analyze this text for sarcasm and metaphors:\n\n"${text}"` }
+          { role: "user", content: `Please analyze this text for sarcasm and all types of figurative language:\n\n"${text}"` }
         ],
         tools: [
           {
             type: "function",
             function: {
               name: "provide_analysis",
-              description: "Provide the analysis of text for sarcasm and metaphors",
+              description: "Provide the analysis of text for sarcasm and figurative language",
               parameters: {
                 type: "object",
                 properties: {
@@ -65,13 +78,17 @@ Be encouraging and supportive in tone. If the text is straightforward with no fi
                     type: "string",
                     description: "A brief, friendly description of the overall tone of the text"
                   },
+                  simplifiedExplanation: {
+                    type: "string",
+                    description: "A simplified, plain-language rewrite of the text that removes all figurative language and expresses the core meaning directly. This should be easy to understand for someone who struggles with non-literal speech."
+                  },
                   hasSarcasm: {
                     type: "boolean",
                     description: "Whether the text contains sarcasm"
                   },
-                  hasMetaphors: {
+                  hasFigurativeLanguage: {
                     type: "boolean",
-                    description: "Whether the text contains metaphors or figurative language"
+                    description: "Whether the text contains any figurative language (metaphors, similes, personification, hyperbole, idioms, symbolism, imagery)"
                   },
                   sarcasmInstances: {
                     type: "array",
@@ -87,18 +104,19 @@ Be encouraging and supportive in tone. If the text is straightforward with no fi
                       required: ["phrase", "literalMeaning", "intendedMeaning", "explanation", "confidence"]
                     }
                   },
-                  metaphorInstances: {
+                  figurativeLanguageInstances: {
                     type: "array",
                     items: {
                       type: "object",
                       properties: {
-                        phrase: { type: "string", description: "The metaphorical phrase" },
+                        phrase: { type: "string", description: "The figurative phrase" },
+                        type: { type: "string", enum: ["metaphor", "simile", "personification", "hyperbole", "idiom", "symbolism", "imagery"], description: "The type of figurative language" },
                         literalMeaning: { type: "string", description: "What the words literally say" },
                         intendedMeaning: { type: "string", description: "What the speaker actually means" },
-                        explanation: { type: "string", description: "Why this is a metaphor - explain the comparison being made" },
+                        explanation: { type: "string", description: "Why this is figurative language - explain the comparison or mechanism being used" },
                         confidence: { type: "string", enum: ["high", "medium", "low"] }
                       },
-                      required: ["phrase", "literalMeaning", "intendedMeaning", "explanation", "confidence"]
+                      required: ["phrase", "type", "literalMeaning", "intendedMeaning", "explanation", "confidence"]
                     }
                   },
                   summary: {
@@ -106,7 +124,7 @@ Be encouraging and supportive in tone. If the text is straightforward with no fi
                     description: "A supportive, encouraging summary of the analysis in 1-2 sentences"
                   }
                 },
-                required: ["overallTone", "hasSarcasm", "hasMetaphors", "sarcasmInstances", "metaphorInstances", "summary"]
+                required: ["overallTone", "simplifiedExplanation", "hasSarcasm", "hasFigurativeLanguage", "sarcasmInstances", "figurativeLanguageInstances", "summary"]
               }
             }
           }
@@ -144,6 +162,12 @@ Be encouraging and supportive in tone. If the text is straightforward with no fi
     }
 
     const analysis = JSON.parse(toolCall.function.arguments);
+    
+    // Map figurativeLanguageInstances to metaphorInstances for backwards compatibility
+    // while keeping the new structure available
+    analysis.hasMetaphors = analysis.hasFigurativeLanguage;
+    analysis.metaphorInstances = analysis.figurativeLanguageInstances || [];
+    
     console.log("Analysis complete:", analysis.summary);
 
     return new Response(

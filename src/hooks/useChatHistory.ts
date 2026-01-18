@@ -1,7 +1,7 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import type { ChatHistoryItem, Analysis } from "@/types/analysis";
 
-const STORAGE_KEY = "clarity-chat-history";
+const STORAGE_KEY = "context-clue-chat-history";
 
 export function useChatHistory() {
   const [history, setHistory] = useState<ChatHistoryItem[]>(() => {
@@ -21,6 +21,13 @@ export function useChatHistory() {
     }
     return [];
   });
+
+  // Sync to session storage whenever history changes
+  useEffect(() => {
+    if (history.length > 0) {
+      sessionStorage.setItem(STORAGE_KEY, JSON.stringify(history));
+    }
+  }, [history]);
 
   const addToHistory = useCallback((text: string, analysis: Analysis) => {
     const newItem: ChatHistoryItem = {

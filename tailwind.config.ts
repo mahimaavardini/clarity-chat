@@ -81,6 +81,14 @@ export default {
           medium: "hsl(var(--confidence-medium))",
           low: "hsl(var(--confidence-low))",
         },
+        figurative: {
+          simile: "hsl(var(--simile))",
+          personification: "hsl(var(--personification))",
+          hyperbole: "hsl(var(--hyperbole))",
+          idiom: "hsl(var(--idiom))",
+          symbolism: "hsl(var(--symbolism))",
+          imagery: "hsl(var(--imagery))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
