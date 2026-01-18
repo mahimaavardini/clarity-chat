@@ -2,7 +2,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { AlertTriangle, Lightbulb, CheckCircle2, HelpCircle, Quote, ArrowRight } from "lucide-react";
-import type { Analysis, SarcasmInstance, MetaphorInstance } from "./TextAnalyzer";
+import type { Analysis, SarcasmInstance, MetaphorInstance } from "@/types/analysis";
 
 interface Props {
   analysis: Analysis;
@@ -136,7 +136,7 @@ export default function AnalysisResult({ analysis }: Props) {
             )}
           </div>
           <div className="space-y-2 flex-1">
-            <h2 className="text-xl font-display font-semibold text-foreground">Analysis Complete</h2>
+            <h2 className="text-xl font-display font-semibold text-foreground">Tone Analysis</h2>
             <p className="text-base text-foreground/80">{analysis.summary}</p>
             <div className="flex flex-wrap gap-2 pt-2">
               <Badge variant="outline" className="bg-background">
